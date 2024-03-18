@@ -394,8 +394,8 @@ main() {
   local status_modules_bottom_right=$(get_tmux_option "@catppuccin_status_modules_bottom_right" "")
   local loaded_modules_bottom_right=$(load_modules "$status_modules_bottom_right" "$modules_custom_path" "$modules_status_path")
 
-  # setw window-status-format "$window_format"
-  #setw window-status-current-format "$window_current_format"
+  setw window-status-format "$window_format"
+  setw window-status-current-format "$window_current_format"
   set status-format[0] "#[align=left]$loaded_modules_left"
   setag status-format[0] "#[align=right]$loaded_modules_right"
   set status-format[1] "#[align=left]$loaded_modules_bottom_left"
