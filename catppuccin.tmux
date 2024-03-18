@@ -29,6 +29,11 @@ set() {
   tmux_commands+=(set-option -gq "$option" "$value" ";")
 }
 
+setag() {
+  local option=$1
+  local value=$2
+  tmux_commands+=(set-option -ga "$option" "$value" ";")
+}
 setw() {
   local option=$1
   local value=$2
@@ -370,8 +375,6 @@ main() {
   local window_format=$(load_modules "window_default_format" "$modules_custom_path" "$modules_window_path")
   local window_current_format=$(load_modules "window_current_format" "$modules_custom_path" "$modules_window_path")
 
-  setw window-status-format "$window_format"
-  setw window-status-current-format "$window_current_format"
 
   local status_left_separator=$(get_tmux_option "@catppuccin_status_left_separator" "")
   local status_right_separator=$(get_tmux_option "@catppuccin_status_right_separator" "█")
@@ -385,9 +388,18 @@ main() {
   local status_modules_left=$(get_tmux_option "@catppuccin_status_modules_left" "")
   local loaded_modules_left=$(load_modules "$status_modules_left" "$modules_custom_path" "$modules_status_path")
 
-  set status-left "$loaded_modules_left"
-  set status-right "$loaded_modules_right"
+  local status_modules_bottom_left=$(get_tmux_option "@catppuccin_status_modules_bottom_left" "")
+  local loaded_modules_bottom_left=$(load_modules "$status_modules_bottom_left" "$modules_custom_path" "$modules_status_path")
 
+  local status_modules_bottom_right=$(get_tmux_option "@catppuccin_status_modules_bottom_right" "")
+  local loaded_modules_bottom_right=$(load_modules "$status_modules_bottom_right" "$modules_custom_path" "$modules_status_path")
+
+  # setw window-status-format "$window_format"
+  #setw window-status-current-format "$window_current_format"
+  set status-format[0] "#[align=left]$loaded_modules_left"
+  setag status-format[0] "#[align=right]$loaded_modules_right"
+  set status-format[1] "#[align=left]$loaded_modules_bottom_left"
+  setag status-format[1] "#[align=right]$loaded_modules_bottom_right"
   # --------=== Modes
   #
   setw clock-mode-colour "${thm_blue}"
